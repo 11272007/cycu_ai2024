@@ -15,7 +15,7 @@ for entry in feed.entries:
     # 印出區隔線
     print("="*50)
 
-    # 將含有 以色列 的標題印出 並轉成CSV格式
+    # 將含有 屏東 的標題印出 並轉成CSV格式
     if "屏東" in entry.title:
         print(f"{entry.title},{entry.link}")
         print("="*50)
