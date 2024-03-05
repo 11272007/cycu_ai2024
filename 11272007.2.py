@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 import pandas as pd
+import pandas as pd
 
 # 獲取網頁內容
 response = requests.get('https://vipmbr.cpc.com.tw/mbwebs/ShowHistoryPrice_oil.aspx')
@@ -15,16 +16,28 @@ tables = soup.find_all('table')
 df1 = pd.read_html(str(tables[0]))[0]
 df2 = pd.read_html(str(tables[1]))[0]
 
-# 印出 DataFrame
-print(df1)
+# 獲取網頁內容
+response = requests.get('https://vipmbr.cpc.com.tw/mbwebs/ShowHistoryPrice_oil2019.aspx')
+
+# 解析網頁內容
+soup = BeautifulSoup(response.text, 'html.parser')
+
+# 找到所有的表格元素
+tables = soup.find_all('table')
+
+# 將 HTML 表格轉換為 DataFrame
+df3 = pd.read_html(str(tables[0]))[0]
+df4 = pd.read_html(str(tables[1]))[0]
+
+#將df2和df4合併並打印出來
+df2 = pd.concat([df2, df4])
 print(df2)
 
 # 將 DataFrame 寫入 CSV 檔案
-df2.to_csv("C:/Users/User/Desktop/oil.csv", index=False)
+df2.to_csv("C:/Users/User/Desktop/oil1.csv", index=False)
 
 import matplotlib.pyplot as plt
 import pandas as pd
-
 
 # 分別保留1、2欄的資料 1、3欄的資料 1、4欄的資料 以及 1、5欄的資料
 df2_12 = df2.iloc[:, [0, 1]].dropna()
@@ -55,5 +68,3 @@ plt.legend(loc='lower right', frameon=False)
 plt.rcParams['font.sans-serif'] = ['Microsoft JhengHei']
 
 plt.show()
-
-
