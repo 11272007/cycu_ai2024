@@ -34,7 +34,7 @@ df2 = pd.concat([df2, df4])
 print(df2)
 
 # 將 DataFrame 寫入 CSV 檔案
-df2.to_csv("C:/Users/User/Desktop/oil1.csv", index=False)
+df2.to_csv("C:/Users/jimmy/OneDrive/桌面/cycu_ai2024/oil1.csv", index=False)
 
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -44,6 +44,12 @@ df2_12 = df2.iloc[:, [0, 1]].dropna()
 df2_13 = df2.iloc[:, [0, 2]].dropna()
 df2_14 = df2.iloc[:, [0, 3]].dropna()
 df2_15 = df2.iloc[:, [0, 4]].dropna()
+
+# 刪除 YYYY/MM/DD 下午 hh:mm:ss 格式的資料
+df2_12 = df2_12[~df2_12.iloc[:, 0].str.contains('下午')]
+df2_13 = df2_13[~df2_13.iloc[:, 0].str.contains('下午')]
+df2_14 = df2_14[~df2_14.iloc[:, 0].str.contains('下午')]
+df2_15 = df2_15[~df2_15.iloc[:, 0].str.contains('下午')]
 
 # 把所有第1欄的資料型態轉成datetime
 df2_12.iloc[:, 0] = pd.to_datetime(df2_12.iloc[:, 0])

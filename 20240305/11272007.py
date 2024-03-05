@@ -20,7 +20,7 @@ print(df1)
 print(df2)
 
 # 將 DataFrame 寫入 CSV 檔案
-df2.to_csv("C:/Users/User/Desktop/oil.csv", index=False)
+df2.to_csv("C:/Users/jimmy/OneDrive/桌面/cycu_ai2024/oil.csv", index=False)
 
 import matplotlib.pyplot as plt
 import pandas as pd
