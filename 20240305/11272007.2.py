@@ -34,7 +34,7 @@ df2 = pd.concat([df2, df4])
 print(df2)
 
 # 將 DataFrame 寫入 CSV 檔案
-df2.to_csv("C:\Users\User\Desktop\oil1.csv", index=False)
+df2.to_csv("C:/Users/User/Desktop/oil1.csv", index=False)
 
 import matplotlib.pyplot as plt
 import pandas as pd
