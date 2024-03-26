@@ -2,7 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 # 讀取CSV文件
-df = pd.read_csv('C:/Users/User/Desktop/cycu_ai2024/20240312/112年1-10月交通事故簡訊通報資料.csv')
+df = pd.read_csv('/workspaces/cycu_ai2024/20240312/112年1-10月交通事故簡訊通報資料.csv')
 
 # 留下"國道名稱"欄位中有 "1" 且"方向"欄為中有 "南" 的資料
 filtered_df = df[(df['國道名稱'].str.contains('3')) & (df['方向'].str.contains('南'))]
