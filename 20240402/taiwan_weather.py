@@ -89,5 +89,5 @@ taiwan['Temperature'] = taiwan['Temperature'].apply(convert_temperature_range_to
 # 以溫度由高到低，從紅到藍
 taiwan.plot(column='Temperature', cmap='coolwarm', ax=ax)
 
-plt.title('台灣 04/02 今晚明晨溫度預報', fontproperties='Arial Unicode MS')
+plt.title('台灣 04/02 今晚明晨溫度預報      [11272007 蕭銘斈]', fontproperties='Arial Unicode MS')
 plt.show()
