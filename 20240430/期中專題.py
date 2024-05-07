@@ -60,7 +60,8 @@ for i in range(len(dfs)):
     dfs[i].insert(4, '旅行時間', dfs2[i]['旅行時間'])
 
 # 將dfs中的所有DataFrame合併成一個DataFrame
-df_final = pd.concat(dfs)
+df = pd.concat(dfs)
+print(df)
 
 # 輸出為一個新的 CSV 檔案
-df_final.to_csv("C:\\Users\\User\\Desktop\\cycu_ai2024\\20240430\\1.csv")
+df.to_csv("C:\\Users\\jimmy\\OneDrive\\桌面\\cycu_ai2024\\20240430\\1.csv")

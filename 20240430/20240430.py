@@ -1,6 +1,6 @@
 # 讀取 CSV 文件並轉換為 DataFrame
 import pandas as pd
-df = pd.read_csv('C:\\Users\\User\\Desktop\\cycu_ai2024\\20240430\\1.csv')
+df = pd.read_csv('C:\\Users\\jimmy\\OneDrive\\桌面\\cycu_ai2024\\20240430\\1.csv')
 
 # 保留上游偵測站編號和下游偵測站編號開頭都有01的資料
 df = df[df['上游偵測站編號'].str.startswith('01') & df['下游偵測站編號'].str.startswith('01')].copy()
@@ -43,16 +43,16 @@ df.insert(7, '42_車種', 42)
 df.sort_values(by=['時間', '方向', '里程'], inplace=True)
 df.reset_index(drop=True, inplace=True)
 
-# 特徵化車速0，1~20，21~40，41~60，61~80，81~100分別定義為0，1，2，3，4，5
-df['5_車速'] = pd.cut(df['5_車速'], bins=[0, 1, 20, 40, 60, 80, 100], labels=False)
-df['31_車速'] = pd.cut(df['31_車速'], bins=[0, 1, 20, 40, 60, 80, 100], labels=False)
-df['32_車速'] = pd.cut(df['32_車速'], bins=[0, 1, 20, 40, 60, 80, 100], labels=False)
-df['41_車速'] = pd.cut(df['41_車速'], bins=[0, 1, 20, 40, 60, 80, 100], labels=False)
-df['42_車速'] = pd.cut(df['42_車速'], bins=[0, 1, 20, 40, 60, 80, 100], labels=False)
+# 特徵化車速 -100~0，1~20，21~40，41~60，61~80，81~200分別定義為0，1，2，3，4，5
+df['5_車速'] = pd.cut(df['5_車速'], bins=[-100, 0, 20, 40, 60, 80, 200], labels=False)
+df['31_車速'] = pd.cut(df['31_車速'], bins=[-100, 0, 20, 40, 60, 80, 200], labels=False)
+df['32_車速'] = pd.cut(df['32_車速'], bins=[-100, 0, 20, 40, 60, 80, 200], labels=False)
+df['41_車速'] = pd.cut(df['41_車速'], bins=[-100, 0, 20, 40, 60, 80, 200], labels=False)
+df['42_車速'] = pd.cut(df['42_車速'], bins=[-100, 0, 20, 40, 60, 80, 200], labels=False)
 
 print(df)
 # 輸出為一個新的 CSV 檔案
-df.to_csv("C:\\Users\\User\\Desktop\\cycu_ai2024\\20240430\\2.csv", encoding='utf-8-sig')
+df.to_csv("C:\\Users\\jimmy\\OneDrive\\桌面\\cycu_ai2024\\20240430\\2.csv", encoding='utf-8-sig')
 
 # 繪製四維圖
 import matplotlib.pyplot as plt
@@ -64,27 +64,27 @@ fig = plt.figure()
 ax = fig.add_subplot(111, projection='3d')
 
 # 創建一個自定義的色彩映射
-cmap = mcolors.ListedColormap(['purple', 'red', 'orange', 'yellow', 'green'])
+cmap = mcolors.ListedColormap(['white', 'purple', 'red', 'orange', 'yellow', 'green'])
 
 # x軸為里程，y軸為時間，z軸為交通量，顏色為車速
 x = df['里程']
 y = df['時間']
 
 c = df['5_車速']
-ax.scatter(x, y, c=c, cmap=cmap, edgecolors='gray', linewidths=0.5, label='5')
+ax.scatter(x, y, c=c, cmap=cmap, edgecolors='black', linewidths=0.5, label='5')
 
 z = df['31_交通量']
 c = df['31_車速']
-ax.scatter(x, y, z, c=c, cmap=cmap, edgecolors='lightgray', linewidths=0.5, label='31')
+ax.scatter(x, y, z, c=c, cmap=cmap, edgecolors='dimgray', linewidths=0.5, label='31')
 
 c = df['32_車速']
-ax.scatter(x, y, c=c, cmap=cmap, edgecolors='darkgray', linewidths=0.5, label='32')
+ax.scatter(x, y, c=c, cmap=cmap, edgecolors='gray', linewidths=0.5, label='32')
 
 c = df['41_車速']
-ax.scatter(x, y, c=c, cmap=cmap, edgecolors='dimgray', linewidths=0.5, label='41')
+ax.scatter(x, y, c=c, cmap=cmap, edgecolors='silver', linewidths=0.5, label='41')
 
 c = df['42_車速']
-ax.scatter(x, y, c=c, cmap=cmap, edgecolors='gray', linewidths=0.5, label='42')
+ax.scatter(x, y, c=c, cmap=cmap, edgecolors='lightgray', linewidths=0.5, label='42')
 
 ax.set_xlabel('里程')
 ax.set_ylabel('時間')
