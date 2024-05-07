@@ -43,6 +43,58 @@ df.insert(7, '42_車種', 42)
 df.sort_values(by=['時間', '方向', '里程'], inplace=True)
 df.reset_index(drop=True, inplace=True)
 
+# 特徵化車速0，1~20，21~40，41~60，61~80，81~100分別定義為0，1，2，3，4，5
+df['5_車速'] = pd.cut(df['5_車速'], bins=[0, 1, 20, 40, 60, 80, 100], labels=False)
+df['31_車速'] = pd.cut(df['31_車速'], bins=[0, 1, 20, 40, 60, 80, 100], labels=False)
+df['32_車速'] = pd.cut(df['32_車速'], bins=[0, 1, 20, 40, 60, 80, 100], labels=False)
+df['41_車速'] = pd.cut(df['41_車速'], bins=[0, 1, 20, 40, 60, 80, 100], labels=False)
+df['42_車速'] = pd.cut(df['42_車速'], bins=[0, 1, 20, 40, 60, 80, 100], labels=False)
+
 print(df)
 # 輸出為一個新的 CSV 檔案
 df.to_csv("C:\\Users\\User\\Desktop\\cycu_ai2024\\20240430\\2.csv", encoding='utf-8-sig')
+
+# 繪製四維圖
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+import numpy as np
+import matplotlib.colors as mcolors
+
+fig = plt.figure()
+ax = fig.add_subplot(111, projection='3d')
+
+# 創建一個自定義的色彩映射
+cmap = mcolors.ListedColormap(['purple', 'red', 'orange', 'yellow', 'green'])
+
+# x軸為里程，y軸為時間，z軸為交通量，顏色為車速
+x = df['里程']
+y = df['時間']
+
+c = df['5_車速']
+ax.scatter(x, y, c=c, cmap=cmap, edgecolors='gray', linewidths=0.5, label='5')
+
+z = df['31_交通量']
+c = df['31_車速']
+ax.scatter(x, y, z, c=c, cmap=cmap, edgecolors='lightgray', linewidths=0.5, label='31')
+
+c = df['32_車速']
+ax.scatter(x, y, c=c, cmap=cmap, edgecolors='darkgray', linewidths=0.5, label='32')
+
+c = df['41_車速']
+ax.scatter(x, y, c=c, cmap=cmap, edgecolors='dimgray', linewidths=0.5, label='41')
+
+c = df['42_車速']
+ax.scatter(x, y, c=c, cmap=cmap, edgecolors='gray', linewidths=0.5, label='42')
+
+ax.set_xlabel('里程')
+ax.set_ylabel('時間')
+ax.set_zlabel('交通量')
+
+ax.legend(labels=['聯結車', '小客車', '小貨車', '大客車', '大貨車'])
+
+plt.rcParams['font.sans-serif'] = ['Microsoft JhengHei'] 
+plt.rcParams['axes.unicode_minus'] = False
+
+plt.show()
+
+
