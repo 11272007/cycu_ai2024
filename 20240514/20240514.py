@@ -31,10 +31,10 @@ for hour in range(24):
 df = pd.concat(dfs)
 
 # 存儲為一個 CSV 檔案
-df.to_csv(f"C:\\Users\\User\\Desktop\\cycu_ai2024\\20240514\\output.csv", encoding='utf-8-sig')
+df.to_csv(f"C:\\Users\\jimmy\\OneDrive\\桌面\\cycu_ai2024\\20240514\\o.csv", encoding='utf-8-sig')
 
 # 讀取 CSV 文件並轉換為 DataFrame
-df = pd.read_csv('C:\\Users\\User\\Desktop\\cycu_ai2024\\20240514\\output.csv')
+df = pd.read_csv('C:\\Users\\jimmy\\OneDrive\\桌面\\cycu_ai2024\\20240514\\o.csv')
 
 # 保留上游偵測站編號和下游偵測站編號開頭都有01的資料
 df = df[df['上游偵測站編號'].str.startswith('01') & df['下游偵測站編號'].str.startswith('01')].copy()
@@ -85,87 +85,44 @@ df['41_車速'] = pd.cut(df['41_車速'], bins=[-100, 0, 20, 40, 60, 80, 200], l
 df['42_車速'] = pd.cut(df['42_車速'], bins=[-100, 0, 20, 40, 60, 80, 200], labels=False)
 
 # 輸出為一個新的 CSV 檔案
-df.to_csv(f"C:\\Users\\User\\Desktop\\cycu_ai2024\\20240514\\20240429.csv", encoding='utf-8-sig')
+df.to_csv(f"C:\\Users\\jimmy\\OneDrive\\桌面\\cycu_ai2024\\20240514\\20240429.csv", encoding='utf-8-sig')
+
+# 利用cube spline對時間1的里程和31_交通量做擬合
+import numpy as np
+import matplotlib.pyplot as plt
+from pandas import DataFrame as  df
+from pandas import read_csv
+from scipy.interpolate import CubicSpline
 
 # 讀取 CSV 文件並轉換為 DataFrame
-df = pd.read_csv(f'C:\\Users\\User\\Desktop\\cycu_ai2024\\20240514\\20240429.csv')
-    
-# 繪製四維圖
-import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
-import numpy as np
-import matplotlib.colors as mcolors
+df = pd.read_csv('C:\\Users\\jimmy\\OneDrive\\桌面\\cycu_ai2024\\20240514\\20240429.csv')
 
-fig = plt.figure()
-ax = fig.add_subplot(111, projection='3d')
+# 對時間為1的里程和交通量做 cubic spline 擬合
+mileage = df[(df['時間'] == 1)]['里程'].values
+traffic_volume = df[(df['時間'] == 1)]['31_交通量'].values
 
-# 創建一個自定義的色彩映射
-cmap = mcolors.ListedColormap(['white', 'purple', 'red', 'orange', 'yellow', 'green'])
+# 確保里程數據是嚴格遞增的
+sort_indices = np.argsort(mileage)
+mileage = mileage[sort_indices]
+traffic_volume = traffic_volume[sort_indices]
 
-# x軸為里程，y軸為時間，z軸為交通量，顏色為車速
-x = df['里程']
-y = df['時間']
+cs = CubicSpline(mileage, traffic_volume)
 
-c = df['5_車速']
-ax.scatter(x, y, c=c, cmap=cmap, edgecolors='black', linewidths=0.5, label='5')
+# 產生新的里程數據
+new_mileage = np.linspace(mileage.min(), mileage.max(), 100)
+new_traffic_volume = cs(new_mileage)
 
-z = df['31_交通量']
-c = df['31_車速']
-ax.scatter(x, y, z, c=c, cmap=cmap, edgecolors='dimgray', linewidths=0.5, label='31')
+# 繪製 cubic spline 曲線
+plt.plot(new_mileage, new_traffic_volume, label='Cubic Spline')
+plt.scatter(mileage, traffic_volume, color='red', label='Data')
+plt.xlabel('Mileage')
+plt.ylabel('Traffic Volume')
+plt.legend()
 
-c = df['32_車速']
-ax.scatter(x, y, c=c, cmap=cmap, edgecolors='gray', linewidths=0.5, label='32')
-
-c = df['41_車速']
-ax.scatter(x, y, c=c, cmap=cmap, edgecolors='silver', linewidths=0.5, label='41')
-
-c = df['42_車速']
-ax.scatter(x, y, c=c, cmap=cmap, edgecolors='lightgray', linewidths=0.5, label='42')
-
-ax.set_xlabel('里程')
-ax.set_ylabel('時間')
-ax.set_zlabel('交通量')
-
-ax.legend(labels=['聯結車', '小客車', '小貨車', '大客車', '大貨車'])
-
-plt.rcParams['font.sans-serif'] = ['Microsoft JhengHei'] 
-plt.rcParams['axes.unicode_minus'] = False
-
-
-
-# 依照上面圖上的點，利用cubic spline進行擬合，重新繪製3D曲面圖
-from scipy.interpolate import CubicSpline
-from scipy.interpolate import griddata
-
-# 將里程和時間數據網格化
-x = np.linspace(df['里程'].min(), df['里程'].max(), num=50)
-y = np.linspace(df['時間'].min(), df['時間'].max(), num=50)
-x, y = np.meshgrid(x, y)
-
-# 插值找到每個 (x, y) 點對應的 z (交通量)
-z = griddata((df['里程'], df['時間']), df['5_交通量'], (x, y), method='cubic')
-
-# 繪製曲面圖
-fig = plt.figure()
-ax = fig.add_subplot(111, projection='3d')
-surf = ax.plot_surface(x, y, z, cmap='viridis')
-
-# 添加顏色條
-fig.colorbar(surf)
-
-# 以四個不同的角度繪製曲面圖
-fig = plt.figure()
-ax = fig.add_subplot(111, projection='3d')
-surf = ax.plot_surface(x, y, z, cmap='viridis')
-
-# 設置坐標軸標籤
-ax.set_xlabel('里程')
-ax.set_ylabel('時間')
-ax.set_zlabel('交通量')
-
-# 設置Y軸不為負
-ax.invert_yaxis()
-
-# 以不同的角度繪製曲面圖
-ax.view_init(30, 30)
 plt.show()
+    
+
+
+
+
+
