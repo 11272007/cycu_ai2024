@@ -98,5 +98,9 @@ for date in dates:
     df['41_車速'] = pd.cut(df['41_車速'], bins=[-100, 0, 20, 40, 60, 80, 200], labels=False)
     df['42_車速'] = pd.cut(df['42_車速'], bins=[-100, 0, 20, 40, 60, 80, 200], labels=False)
 
+    # 根據日期判斷星期幾，並寫入第一欄
+    day = date.weekday()
+    df.insert(0, '星期', day)
+
     # 輸出為一個新的 CSV 檔案
     df.to_csv(f"C:\\Users\\jimmy\\OneDrive\\桌面\\cycu_ai2024\\{date_str}.csv", encoding='utf-8-sig')
