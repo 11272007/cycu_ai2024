@@ -6,7 +6,7 @@ import glob
 import shutil
 
 # 設定日期範圍
-dates = pd.date_range(start="2024-04-19", end="2024-04-20")
+dates = pd.date_range(start="2024-01-01", end="2024-04-30")
 
 # 對每一個日期進行處理
 for date in dates:
@@ -132,6 +132,8 @@ for date in dates:
                                 names=['時間', '上游偵測站編號', '下游偵測站編號', '車種', '車速', '交通量'], 
                                 index_col=0, parse_dates=True)
                 dfs.append(df)
+            except Exception as e:
+                print(f"Failed to download {url}: {e}")
 
     # 將dfs中的所有DataFrame合併成一個DataFrame
     df = pd.concat(dfs)

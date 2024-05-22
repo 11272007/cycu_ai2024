@@ -2,7 +2,7 @@ import pandas as pd
 import glob
 
 # 找出資料夾中所有的 CSV 檔案
-csv_files = glob.glob('C:\\Users\\jimmy\\OneDrive\\桌面\\cycu_ai2024\\高速公路資訊\\*.csv')
+csv_files = glob.glob('高速公路資訊\\*.csv')
 
 # 寫出總共有多少筆csv檔
 print(f"總共有{len(csv_files)}筆csv檔")
@@ -15,7 +15,7 @@ for file in csv_files:
 
 if all(len(df) == len(dfs[0]) for df in dfs):
     print("OK")
-    print(f"每個CSV檔案有{len(dfs[0])}列")
+    print(f"每個csv檔案有{len(dfs[0])}列")
 else:
     print("NO")
 
