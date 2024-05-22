@@ -88,6 +88,6 @@ def process_day(day):
     df.to_csv(f"C:\\Users\\jimmy\\OneDrive\\桌面\\cycu_ai2024\\202403{str(day).zfill(2)}.csv", encoding='utf-8-sig')
 
 # 遍歷每個日期
-for day in range(16, 32):
+for day in range(30, 31):
     process_day(day)
 
