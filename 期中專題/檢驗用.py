@@ -19,3 +19,8 @@ if all(len(df) == len(dfs[0]) for df in dfs):
 else:
     print("NO")
 
+# 將列數不一致的csv檔名寫出
+for file in csv_files:
+    df = pd.read_csv(file)
+    if len(df) != len(dfs[0]):
+        print(file)

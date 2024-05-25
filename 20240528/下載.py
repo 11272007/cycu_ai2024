@@ -63,6 +63,15 @@ for date in dates:
     df = df[df['上游偵測站編號'].str.startswith('01') & df['下游偵測站編號'].str.startswith('01')].copy()
     df.reset_index(drop=True, inplace=True)
 
+    # 讀取一個 CSV 檔案，並轉成 DataFrame
+    df_ETag = pd.read_csv('result.csv')
+
+    # 若df的上游偵測站編號有在df_ETag的ETag中，則保留該列資料
+    df = df[df['上游偵測站編號'].isin(df_ETag['ETag'])].copy()
+    df.reset_index(drop=True, inplace=True)
+    # 將df_ETag的經緯度資料加入df
+    df = pd.merge(df, df_ETag, left_on='上游偵測站編號', right_on='ETag', how='left')
+
     # 將時間欄位第一個5分鐘定義為1，第二個5分鐘定義為2，以此類推
     df['時間'] = pd.to_datetime(df['時間'])
     df['時間'] = df['時間'].dt.floor('5T')
@@ -83,10 +92,14 @@ for date in dates:
     df.reset_index(drop=True, inplace=True)
     
     # 將欄位重新排序，時間為第一欄，方向為第二欄，里程為第三欄，車速為第四欄，交通量為第五欄，其他欄位刪除
-    df = df[['時間', '方向', '里程', '車速', '交通量']].copy()
+    df = df[['時間', '方向', '里程', '車速', '交通量', '經度', '緯度']].copy()
     
     # 改以時間、方向、里程排序
     df.sort_values(by=['時間', '方向', '里程'], inplace=True)
+    df.reset_index(drop=True, inplace=True)
+
+    # 同一時間、方向下，如果里程相同，則保留車速值最大的資料
+    df = df.loc[df.groupby(['時間', '方向', '里程'])['車速'].idxmax()].copy()
     df.reset_index(drop=True, inplace=True)
 
     # 根據日期判斷星期幾，並將數字寫入第一欄，星期一為1，星期二為2，以此類推
@@ -148,6 +161,15 @@ for date in dates:
     df = df[df['上游偵測站編號'].str.startswith('01') & df['下游偵測站編號'].str.startswith('01')].copy()
     df.reset_index(drop=True, inplace=True)
 
+    # 讀取一個 CSV 檔案，並轉成 DataFrame
+    df_ETag = pd.read_csv('result.csv')
+
+    # 若df的上游偵測站編號有在df_ETag的ETag中，則保留該列資料
+    df = df[df['上游偵測站編號'].isin(df_ETag['ETag'])].copy()
+    df.reset_index(drop=True, inplace=True)
+    # 將df_ETag的經緯度資料加入df
+    df = pd.merge(df, df_ETag, left_on='上游偵測站編號', right_on='ETag', how='left')
+
     # 將時間欄位第一個5分鐘定義為1，第二個5分鐘定義為2，以此類推
     df['時間'] = pd.to_datetime(df['時間'])
     df['時間'] = df['時間'].dt.floor('5T')
@@ -168,10 +190,14 @@ for date in dates:
     df.reset_index(drop=True, inplace=True)
     
     # 將欄位重新排序，時間為第一欄，方向為第二欄，里程為第三欄，車速為第四欄，交通量為第五欄，其他欄位刪除
-    df = df[['時間', '方向', '里程', '車速', '交通量']].copy()
+    df = df[['時間', '方向', '里程', '車速', '交通量', '經度', '緯度']].copy()
     
     # 改以時間、方向、里程排序
     df.sort_values(by=['時間', '方向', '里程'], inplace=True)
+    df.reset_index(drop=True, inplace=True)
+
+    # 同一時間、方向下，如果里程相同，則保留車速值最大的資料
+    df = df.loc[df.groupby(['時間', '方向', '里程'])['車速'].idxmax()].copy()
     df.reset_index(drop=True, inplace=True)
 
     # 根據日期判斷星期幾，並將數字寫入第一欄，星期一為1，星期二為2，以此類推
