@@ -123,7 +123,7 @@ for date in dates:
     # 將31_車速移至下游偵測站編號後面
     df = df[['時間', '上游偵測站編號', '下游偵測站編號', '31_車速', '31_交通量', '32_交通量', '41_交通量', '42_交通量', '5_交通量']]
     # 將31_交通量、32_交通量、41_交通量、42_交通量、5_交通量欄位名稱改為v31、v32、v41、v42、v5
-    df.rename(columns={'31_交通量': 'v31', '32_交通量': 'v32', '41_交通量': 'v41', '42_交通量': 'v42', '5_交通量': 'v5'}, inplace=True)
+    df.rename(columns={'時間': 'TimeInterval', '上游偵測站編號': 'GantryFrom', '下游偵測站編號': 'GantryTo', '31_車速': 'SpaceMeanSpeed', '31_交通量': 'v31', '32_交通量': 'v32', '41_交通量': 'v41', '42_交通量': 'v42', '5_交通量': 'v5'}, inplace=True)
 
     # 輸出為一個新的 CSV 檔案
     df.to_csv(f"M05A_{date_str}.csv", index=False, encoding='utf-8-sig')
