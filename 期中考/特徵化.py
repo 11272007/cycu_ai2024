@@ -2,7 +2,7 @@ import pandas as pd
 import os
 
 # 設定一個日期範圍
-dates = pd.date_range(start='2024-04-03', end='2024-04-03', freq='D')
+dates = pd.date_range(start='2024-01-01', end='2024-04-30', freq='D')
 
 # 設定特定資料夾路徑
 folder_path = '高速公路資訊'
@@ -51,5 +51,5 @@ for date in dates:
     df['SpeedClass'] = pd.cut(df['SpaceMeanSpeed'], bins=[-100, 0, 20, 40, 60, 80, 200], labels=[0, 1, 2, 3, 4, 5])     
     
     # 將資料寫入新的csv檔案
-    df.to_csv(f"M05A_{date.strftime('%Y%m%d')}_feature.csv", index=False)    
+    df.to_csv(f"M05A_{date.strftime('%Y%m%d')}_feature.csv", index=False, encoding='utf-8-sig')    
     
