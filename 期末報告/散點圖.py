@@ -5,13 +5,13 @@ import matplotlib.pyplot as plt
 df = pd.read_csv('資料整理.csv')
 
 # 保留無鉛汽油95和道瓊指數兩欄
-df = df[['無鉛汽油95', '道瓊指數']]
+df = df[['國際原油', '道瓊指數']]
 # 刪除有空值的列
 df = df.dropna()
 
 # 繪製散點圖，X軸為台股指數，Y軸為無鉛汽油95
-plt.scatter(df['無鉛汽油95'], df['道瓊指數'])
-plt.xlabel('無鉛汽油', fontsize=24)
+plt.scatter(df['國際原油'], df['道瓊指數'])
+plt.xlabel('國際原油', fontsize=24)
 plt.ylabel('道瓊指數', fontsize=24)
 plt.rcParams['font.sans-serif'] = ['Arial Unicode MS']  # 設定字體為中文字體
 
@@ -19,7 +19,7 @@ plt.rcParams['font.sans-serif'] = ['Arial Unicode MS']  # 設定字體為中文�
 import numpy as np
 from sklearn.linear_model import LinearRegression
 
-x = df['無鉛汽油95'].values.reshape(-1, 1)
+x = df['國際原油'].values.reshape(-1, 1)
 y = df['道瓊指數'].values.reshape(-1, 1)
 
 model = LinearRegression()
